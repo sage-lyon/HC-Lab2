@@ -1,5 +1,6 @@
 #include <CL/cl.h>
 #include <assert.h>
+#include <cstddef>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -9,22 +10,20 @@
 
 using namespace aocl_utils;
 
-#define STRING_BUFFER_LEN 1024
-
-#define LOCAL_SIZE 0
-#define WORKGROUPS 0
+#define LOCAL_SIZE 8
+#define WORKGROUPS 8
 
 void cleanup();
 
-int main() {
+// OpenCL runtime configuration
+static cl_platform_id platform = NULL;
+static cl_device_id device = NULL;
+static cl_context context = NULL;
+static cl_command_queue queue = NULL;
+static cl_kernel kernel = NULL;
+static cl_program program = NULL;
 
-    // OpenCL runtime configuration
-    cl_platform_id platform = NULL;
-    cl_device_id device = NULL;
-    cl_context context = NULL;
-    cl_command_queue queue = NULL;
-    cl_kernel kernel = NULL;
-    cl_program program = NULL;
+int main() {
 
     cl_int status;
 
@@ -87,6 +86,25 @@ int main() {
     // Print result
     printf("Result: %lf\n", result);
 
+    // Release resources
+    clReleaseMemObject(result_buffer);
+    cleanup();
+
     return 0;
 
+}
+
+void cleanup() {
+  if(kernel) {
+    clReleaseKernel(kernel);  
+  }
+  if(program) {
+    clReleaseProgram(program);
+  }
+  if(queue) {
+    clReleaseCommandQueue(queue);
+  }
+  if(context) {
+    clReleaseContext(context);
+  }
 }
