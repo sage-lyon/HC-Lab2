@@ -80,5 +80,3 @@ clean :
 	$(ECHO)rm -rf $(TARGET_DIR)/$(TARGET) $(TARGET_DIR)/$(KERNEL)*
 
 .PHONY : all clean
-
-endif
