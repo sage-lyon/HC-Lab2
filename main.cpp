@@ -10,8 +10,8 @@
 
 using namespace aocl_utils;
 
-#define LOCAL_SIZE 8
-#define WORKGROUPS 8
+#define LOCAL_SIZE 1024
+#define WORKGROUPS 64
 
 void cleanup();
 
@@ -60,12 +60,12 @@ int main() {
     checkError(status, "Unable to build program");
 
     // Create kernel
-    const char* kernel_name = "picalc";
+    const char* kernel_name = "calculate_pi";
     kernel = clCreateKernel(program, kernel_name, &status);
     checkError(status, "Unable to create kernel");
 
     // Set kernel arguments 
-    int operands_per_item = 16;
+    int operands_per_item = 4096;
 
     cl_mem global_results_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, WORKGROUPS * sizeof(double), NULL, &status);
     checkError(status, "Unable to create global result buffer");
@@ -86,10 +86,9 @@ int main() {
 
     // Get results from kernel
     status = clEnqueueReadBuffer(queue, result_buffer, CL_TRUE, 0, sizeof(result), &result, 0, NULL, NULL);
-    checkError(status, "Unable to read result buffer")
-
+    checkError(status, "Unable to read result buffer"); 
     // Print result
-    printf("Result: %lf\n", 4 * result);
+    printf("Result: %.8lf\n", 4 * result);
 
     // Release resources
     clReleaseMemObject(result_buffer);
