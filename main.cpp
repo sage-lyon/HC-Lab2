@@ -66,12 +66,16 @@ int main() {
 
     // Set kernel arguments 
     int operands_per_item = 16;
-    cl_mem result_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(result), result, NULL);
+
+    cl_mem global_results_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, WORKGROUPS * sizeof(double), NULL, &status);
+    checkError(status, "Unable to create global result buffer");
+    cl_mem result_buffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(double), NULL, &status);
+    checkError(status, "Unable to create result buffer");
     
-    status = clSetKernelArg(kernel, 0, sizeof(operands_per_item), &operands_per_item);
+    status = clSetKernelArg(kernel, 0, sizeof(operands_per_item), (void *)&operands_per_item);
     status |= clSetKernelArg(kernel, 1, LOCAL_SIZE * sizeof(double), NULL);
-    status |= clSetKernelArg(kernel, 2, WORKGROUPS * sizeof(double), NULL);
-    status |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &result_buffer);
+    status |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *)&global_results_buffer);
+    status |= clSetKernelArg(kernel, 3, sizeof(cl_mem), (void *)&result_buffer);
     checkError(status, "Unable to set kernel arguments");
 
     // Enqueue and launch kernel
@@ -81,10 +85,11 @@ int main() {
     checkError(status, "Unable to launch kernel");
 
     // Get results from kernel
-    ret = clEnqueueReadBuffer(queue, result_buffer, CL_TRUE, 0, sizeof(result), &result, 0, NULL, NULL);
+    status = clEnqueueReadBuffer(queue, result_buffer, CL_TRUE, 0, sizeof(result), &result, 0, NULL, NULL);
+    checkError(status, "Unable to read result buffer")
 
     // Print result
-    printf("Result: %lf\n", result);
+    printf("Result: %lf\n", 4 * result);
 
     // Release resources
     clReleaseMemObject(result_buffer);
