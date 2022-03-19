@@ -1,4 +1,4 @@
-__kernel void calculate_pi (int operands_per_item, __local double* local_results, __global double* global_results, __global double* final_result) {
+__kernel void calculate_pi (int elements_per_item, __local double* local_results, __global double* global_results, __global double* final_result) {
 
 	// get local and global id and sizes
 	int lid = get_local_id(0);
@@ -20,14 +20,14 @@ __kernel void calculate_pi (int operands_per_item, __local double* local_results
 	// set work item index
 	int index = 2 * gid + 1;
 
-	for(int operand = index; operand < (gsize + 1) * 2; operand += 2 * operands_per_item){
-		// if global id is even then work item is adding its operands
+	for(int element = index; element < (gsize + 1) * 2; element += 2 * elements_per_item){
+		// if global id is even then work item is adding its elements
 		if(gid % 2 == 0)
-		    local_results[lid] += (1.0 / operand);
+		    local_results[lid] += (1.0 / element);
 
-		// if global id is odd then work item is subtracting its operands
+		// if global id is odd then work item is subtracting its elements
 		if(gid % 2 == 1)
-		    local_results[lid] -= (1.0 / operand);
+		    local_results[lid] -= (1.0 / element);
     }
 
     // wait for all work items in a group to finish

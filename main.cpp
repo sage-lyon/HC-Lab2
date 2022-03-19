@@ -65,14 +65,14 @@ int main() {
     checkError(status, "Unable to create kernel");
 
     // Set kernel arguments 
-    int operands_per_item = 4096;
+    int elements_per_item = 4096;
 
     cl_mem global_results_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, WORKGROUPS * sizeof(double), NULL, &status);
     checkError(status, "Unable to create global result buffer");
     cl_mem result_buffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(double), NULL, &status);
     checkError(status, "Unable to create result buffer");
     
-    status = clSetKernelArg(kernel, 0, sizeof(operands_per_item), (void *)&operands_per_item);
+    status = clSetKernelArg(kernel, 0, sizeof(elements_per_item), (void *)&elements_per_item);
     status |= clSetKernelArg(kernel, 1, LOCAL_SIZE * sizeof(double), NULL);
     status |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *)&global_results_buffer);
     status |= clSetKernelArg(kernel, 3, sizeof(cl_mem), (void *)&result_buffer);
