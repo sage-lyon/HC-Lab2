@@ -69,7 +69,7 @@ int main() {
 
     cl_mem global_results_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, WORKGROUPS * sizeof(double), NULL, &status);
     checkError(status, "Unable to create global result buffer");
-    cl_mem result_buffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(double), NULL, &status);
+    cl_mem result_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(double), NULL, &status);
     checkError(status, "Unable to create result buffer");
     
     status = clSetKernelArg(kernel, 0, sizeof(elements_per_item), (void *)&elements_per_item);
@@ -91,6 +91,7 @@ int main() {
     printf("Result: %.8lf\n", 4 * result);
 
     // Release resources
+    clReleaseMemObject(global_results_buffer);
     clReleaseMemObject(result_buffer);
     cleanup();
 
