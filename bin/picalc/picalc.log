@@ -1,1 +1,0 @@
-Compiler Command: aoc -march=emulator -board=pac_a10 picalc.cl -o bin/picalc.aocx
