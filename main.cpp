@@ -10,8 +10,8 @@
 
 using namespace aocl_utils;
 
-#define LOCAL_SIZE 1024
-#define WORKGROUPS 64
+#define LOCAL_SIZE 32
+#define WORKGROUPS 32
 
 void cleanup();
 
@@ -65,7 +65,7 @@ int main() {
     checkError(status, "Unable to create kernel");
 
     // Set kernel arguments 
-    int elements_per_item = 4096;
+    int elements_per_item = 32;
 
     cl_mem global_results_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, WORKGROUPS * sizeof(double), NULL, &status);
     checkError(status, "Unable to create global result buffer");

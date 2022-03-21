@@ -22,6 +22,7 @@ __kernel void calculate_pi (int elements_per_item, __local double* local_results
 
 	for(int element = index; element < (gsize + 1) * 2; element += 2 * elements_per_item){
 		// if global id is even then work item is adding its elements
+		//printf("%d: %lf\n", element, 1.0 / element);
 		if(gid % 2 == 0)
 		    local_results[lid] += (1.0 / element);
 
@@ -38,6 +39,7 @@ __kernel void calculate_pi (int elements_per_item, __local double* local_results
         for(int i = 0; i < lsize; i++){
             global_results[group_id] += local_results[i];
 	    }
+	printf("global_result[%d] = %lf\n", group_id, global_results[group_id]);
     }
     
 

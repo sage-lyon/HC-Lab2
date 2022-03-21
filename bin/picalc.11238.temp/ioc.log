@@ -1,0 +1,14 @@
+Using build options: -cl-std=CL1.2 -g -s "/home/u132300/HC-Lab2/picalc.cl" -Xclang -O3 -Xclang -Wuninitialized -Xclang -DINTELFPGA_CL=194 -Xclang -ivfsoverlay-lib/glob/development-tools/versions/fpgasupportstack/a10/1.2.1/intelFPGA_pro/hld/linux64/lib/libaoc_clang_decrypt.so -I "/home/u132300/HC-Lab2" -I "/glob/development-tools/versions/fpgasupportstack/a10/1.2.1/intelFPGA_pro/hld/llvm/include/cclang"
+Setting target instruction set architecture to: Default (Intel(R) Advanced Vector Extensions 2 (Intel(R) AVX2))
+Platform name: Intel(R) FPGA Emulation Platform for OpenCL(TM)
+Device name: Intel(R) FPGA Emulation Device
+Device version: OpenCL 1.0 
+Device vendor: Intel(R) Corporation
+Device profile: EMBEDDED_PROFILE
+Compilation started
+/home/u132300/HC-Lab2/picalc.cl:25:3: error: implicit declaration of function 'print' is invalid in OpenCL
+                print("%d: %lf\n", element, 1.0 / element);
+                ^
+Compilation failed
+Failed to build program...: -15 (CL_COMPILE_PROGRAM_FAILURE)
+Compilation failed!
